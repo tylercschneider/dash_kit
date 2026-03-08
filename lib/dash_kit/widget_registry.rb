@@ -29,6 +29,10 @@ module DashKit
     def widget_partial(dashboard_type, widget_key)
       widgets_for(dashboard_type).dig(widget_key.to_sym, :partial)
     end
+
+    def dashboard_types
+      @dashboards.keys
+    end
   end
 
   class DashboardBuilder

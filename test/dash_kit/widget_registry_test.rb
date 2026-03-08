@@ -51,4 +51,15 @@ class DashKit::WidgetRegistryTest < Minitest::Test
   def test_unknown_dashboard_type_raises
     assert_raises(KeyError) { @registry.widgets_for(:nonexistent) }
   end
+
+  def test_dashboard_types
+    @registry.register(:home) do |d|
+      d.widget :on_deck, label: "On Deck", partial: "widgets/home/on_deck"
+    end
+    @registry.register(:inventory) do |d|
+      d.widget :metrics, label: "Metrics", partial: "widgets/inventory/metrics"
+    end
+
+    assert_equal %i[home inventory], @registry.dashboard_types
+  end
 end
