@@ -62,4 +62,19 @@ class DashKit::WidgetRegistryTest < Minitest::Test
 
     assert_equal %i[home inventory], @registry.dashboard_types
   end
+
+  def test_global_configure
+    DashKit.reset_registry!
+
+    DashKit.configure do |config|
+      config.register(:home) do |d|
+        d.widget :on_deck, label: "On Deck", partial: "widgets/home/on_deck"
+      end
+    end
+
+    assert_equal %i[home], DashKit.registry.dashboard_types
+    assert_equal "On Deck", DashKit.registry.widget_label(:home, :on_deck)
+  ensure
+    DashKit.reset_registry!
+  end
 end
