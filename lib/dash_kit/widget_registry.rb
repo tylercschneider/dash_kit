@@ -15,6 +15,12 @@ module DashKit
     def widgets_for(dashboard_type)
       @dashboards.fetch(dashboard_type.to_sym)
     end
+
+    def default_widget_order(dashboard_type)
+      widgets_for(dashboard_type)
+        .sort_by { |_, v| v[:position] }
+        .map { |k, _| k.to_s }
+    end
   end
 
   class DashboardBuilder
