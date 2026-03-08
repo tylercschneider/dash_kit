@@ -21,6 +21,14 @@ module DashKit
         .sort_by { |_, v| v[:position] }
         .map { |k, _| k.to_s }
     end
+
+    def widget_label(dashboard_type, widget_key)
+      widgets_for(dashboard_type).dig(widget_key.to_sym, :label)
+    end
+
+    def widget_partial(dashboard_type, widget_key)
+      widgets_for(dashboard_type).dig(widget_key.to_sym, :partial)
+    end
   end
 
   class DashboardBuilder
