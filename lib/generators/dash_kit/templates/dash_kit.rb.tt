@@ -1,0 +1,8 @@
+DashKit.configure do |config|
+  # Register your dashboards and widgets here.
+  #
+  # config.register(:home) do |d|
+  #   d.widget :on_deck,  label: "On Deck",  partial: "widgets/home/on_deck"
+  #   d.widget :tasks,    label: "Tasks",     partial: "widgets/home/tasks"
+  # end
+end
