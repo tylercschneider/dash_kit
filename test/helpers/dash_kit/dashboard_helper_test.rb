@@ -58,4 +58,10 @@ class DashKit::DashboardHelperTest < ActionView::TestCase
     assert_match(/Tasks/, html)
     assert_match(/dashboard-settings-modal/, html)
   end
+
+  test "dash_kit_settings_button_attributes returns data attributes" do
+    attrs = dash_kit_settings_button_attributes
+    assert_equal "button", attrs[:type]
+    assert_equal "click->modal#open", attrs[:data][:action]
+  end
 end
