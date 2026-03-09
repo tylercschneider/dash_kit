@@ -45,7 +45,7 @@ module DashKit
 
     def widget(key, label:, partial:, **options)
       @position += 1
-      @widgets[key.to_sym] = {label: label, partial: partial, position: @position}.merge(options)
+      @widgets[key.to_sym] = { label: label, partial: partial, position: @position }.merge(options)
     end
   end
 end
