@@ -46,4 +46,12 @@ class DashKit::ConfigurationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
     assert_equal %w[on_deck tasks goals], @config.reload.widget_order
   end
+
+  test "save_filters updates filter state" do
+    post dash_kit.save_filters_configuration_path(@config),
+      params: { filter_key: "time_period", filter_value: "last_7_days" }
+
+    assert_response :ok
+    assert_equal "last_7_days", @config.reload.filter_state["time_period"]
+  end
 end

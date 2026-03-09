@@ -9,6 +9,11 @@ module DashKit
       redirect_back fallback_location: main_app.root_path
     end
 
+    def save_filters
+      @configuration.update_filter(params[:filter_key], params[:filter_value])
+      head :ok
+    end
+
     def reorder
       new_order = params[:widget_order]
       valid_keys = @configuration.available_widgets.keys.map(&:to_s)
