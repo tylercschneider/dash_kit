@@ -132,7 +132,9 @@ GEM
     mcp (0.8.0)
       json-schema (>= 4.1)
     mini_mime (1.1.5)
-    minitest (5.27.0)
+    minitest (6.0.2)
+      drb (~> 2.0)
+      prism (~> 1.5)
     net-imap (0.6.3)
       date
       net-protocol
@@ -294,7 +296,7 @@ PLATFORMS
 DEPENDENCIES
   dash_kit!
   keystone_ui!
-  minitest (~> 5.0)
+  minitest (~> 6.0)
   puma
   rake
   rubocop-rails-omakase
