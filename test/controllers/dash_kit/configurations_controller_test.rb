@@ -30,4 +30,20 @@ class DashKit::ConfigurationsControllerTest < ActionDispatch::IntegrationTest
     @config.reload
     assert_includes @config.hidden_widgets, "tasks"
   end
+
+  test "reorder updates widget order with valid keys" do
+    post dash_kit.reorder_configuration_path(@config),
+      params: { widget_order: %w[goals tasks on_deck] }
+
+    assert_response :ok
+    assert_equal %w[goals tasks on_deck], @config.reload.widget_order
+  end
+
+  test "reorder rejects invalid keys" do
+    post dash_kit.reorder_configuration_path(@config),
+      params: { widget_order: %w[goals fake_widget] }
+
+    assert_response :unprocessable_entity
+    assert_equal %w[on_deck tasks goals], @config.reload.widget_order
+  end
 end
