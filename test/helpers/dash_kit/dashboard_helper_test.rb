@@ -51,4 +51,11 @@ class DashKit::DashboardHelperTest < ActionView::TestCase
     assert_match(/widget_on_deck/, html)
     assert_no_match(/widget_tasks/, html)
   end
+
+  test "dash_kit_settings_modal renders widget list" do
+    html = render(partial: "dash_kit/configurations/modal", locals: { config: @config })
+    assert_match(/On Deck/, html)
+    assert_match(/Tasks/, html)
+    assert_match(/dashboard-settings-modal/, html)
+  end
 end
