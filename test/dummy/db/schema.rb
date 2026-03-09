@@ -16,6 +16,6 @@ ActiveRecord::Schema.define(version: 1) do
     t.timestamps
   end
 
-  add_index :dash_kit_configurations, [:owner_type, :owner_id, :dashboard_type],
+  add_index :dash_kit_configurations, [ :owner_type, :owner_id, :dashboard_type ],
     unique: true, name: "index_dash_kit_configs_on_owner_and_type"
 end
