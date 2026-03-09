@@ -6,6 +6,19 @@ module DashKit
       config.available_widgets.dig(widget_key.to_sym, :label) || widget_key.to_s.humanize
     end
 
+    def dash_kit_render_widgets(config:)
+      return "".html_safe unless config
+
+      safe_join(
+        config.ordered_visible_widgets.filter_map do |widget_key|
+          widget_def = config.available_widgets[widget_key.to_sym]
+          next unless widget_def
+
+          dash_kit_widget_frame(widget_key)
+        end
+      )
+    end
+
     def dash_kit_widget_frame(widget_key, &block)
       src = dash_kit.widget_path(widget_key)
       id = "widget_#{widget_key}"

@@ -38,4 +38,17 @@ class DashKit::DashboardHelperTest < ActionView::TestCase
     assert_match(/widget_on_deck/, html)
     assert_match(/loading="lazy"/, html)
   end
+
+  test "dash_kit_render_widgets renders frames for visible widgets" do
+    html = dash_kit_render_widgets(config: @config)
+    assert_match(/widget_on_deck/, html)
+    assert_match(/widget_tasks/, html)
+  end
+
+  test "dash_kit_render_widgets skips hidden widgets" do
+    @config.update!(hidden_widgets: %w[tasks])
+    html = dash_kit_render_widgets(config: @config)
+    assert_match(/widget_on_deck/, html)
+    assert_no_match(/widget_tasks/, html)
+  end
 end
