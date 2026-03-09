@@ -26,4 +26,28 @@ class DashKit::ConfigurationTest < ActiveSupport::TestCase
 
     assert_equal %w[on_deck goals], config.ordered_visible_widgets
   end
+
+  test "toggle_widget hides a visible widget" do
+    config = DashKit::Configuration.create!(
+      owner: @account,
+      dashboard_type: "home",
+      widget_order: %w[on_deck tasks goals],
+      hidden_widgets: []
+    )
+
+    config.toggle_widget(:tasks)
+    assert_includes config.hidden_widgets, "tasks"
+  end
+
+  test "toggle_widget shows a hidden widget" do
+    config = DashKit::Configuration.create!(
+      owner: @account,
+      dashboard_type: "home",
+      widget_order: %w[on_deck tasks goals],
+      hidden_widgets: %w[tasks]
+    )
+
+    config.toggle_widget(:tasks)
+    refute_includes config.hidden_widgets, "tasks"
+  end
 end
