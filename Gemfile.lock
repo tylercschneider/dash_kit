@@ -1,7 +1,15 @@
+GIT
+  remote: https://github.com/tylercschneider/keystone_ui.git
+  revision: 823d7503a16d925f221f3effb00e13dec235fc52
+  specs:
+    keystone_ui (0.4.1)
+      view_component (>= 2.0)
+
 PATH
   remote: .
   specs:
     dash_kit (0.1.0)
+      keystone_ui
       rails (>= 7.1)
 
 GEM
@@ -263,6 +271,10 @@ GEM
     unicode-emoji (4.2.0)
     uri (1.1.1)
     useragent (0.16.11)
+    view_component (4.5.0)
+      actionview (>= 7.1.0)
+      activesupport (>= 7.1.0)
+      concurrent-ruby (~> 1)
     websocket-driver (0.8.0)
       base64
       websocket-extensions (>= 0.1.0)
@@ -281,6 +293,7 @@ PLATFORMS
 
 DEPENDENCIES
   dash_kit!
+  keystone_ui!
   minitest (~> 5.0)
   puma
   rake

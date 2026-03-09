@@ -1,0 +1,43 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+module DashKit
+  class DashboardHelperTest < ActionView::TestCase
+    include DashKit::DashboardHelper
+    include KeystoneUiHelper
+    include DashKit::Engine.routes.url_helpers
+
+    setup do
+      DashKit.reset_registry!
+      DashKit.configure do |r|
+        r.register(:test_dashboard) do |d|
+          d.widget :stats, label: "Stats", partial: "widgets/stats"
+          d.widget :chart, label: "Chart", partial: "widgets/chart"
+        end
+      end
+
+      @config = DashKit::Configuration.for_owner(Account.create!(name: "Test"), :test_dashboard)
+      @config.save!
+    end
+
+    test "dash_kit_widget_label returns label from registry" do
+      assert_equal "Stats", dash_kit_widget_label(@config, :stats)
+    end
+
+    test "dash_kit_widget_label falls back to humanized key" do
+      assert_equal "Unknown widget", dash_kit_widget_label(@config, :unknown_widget)
+    end
+
+    test "dash_kit_loading_skeleton renders a ui_panel with pulse animation" do
+      html = dash_kit_loading_skeleton
+      assert_match "animate-pulse", html
+    end
+
+    test "dash_kit_settings_button_attributes returns hash with modal action" do
+      attrs = dash_kit_settings_button_attributes
+      assert_equal "button", attrs[:type]
+      assert_equal "click->modal#open", attrs[:data][:action]
+    end
+  end
+end
