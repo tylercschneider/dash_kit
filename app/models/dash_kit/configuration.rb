@@ -21,5 +21,23 @@ module DashKit
       end
       save!
     end
+
+    def move_widget_up(widget_key)
+      index = widget_order.index(widget_key.to_s)
+      return if index.nil? || index == 0
+
+      new_order = widget_order.dup
+      new_order[index], new_order[index - 1] = new_order[index - 1], new_order[index]
+      update!(widget_order: new_order)
+    end
+
+    def move_widget_down(widget_key)
+      index = widget_order.index(widget_key.to_s)
+      return if index.nil? || index == widget_order.length - 1
+
+      new_order = widget_order.dup
+      new_order[index], new_order[index + 1] = new_order[index + 1], new_order[index]
+      update!(widget_order: new_order)
+    end
   end
 end

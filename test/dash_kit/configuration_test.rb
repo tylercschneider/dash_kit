@@ -50,4 +50,52 @@ class DashKit::ConfigurationTest < ActiveSupport::TestCase
     config.toggle_widget(:tasks)
     refute_includes config.hidden_widgets, "tasks"
   end
+
+  test "move_widget_up swaps with previous widget" do
+    config = DashKit::Configuration.create!(
+      owner: @account,
+      dashboard_type: "home",
+      widget_order: %w[on_deck tasks goals],
+      hidden_widgets: []
+    )
+
+    config.move_widget_up(:tasks)
+    assert_equal %w[tasks on_deck goals], config.reload.widget_order
+  end
+
+  test "move_widget_up does nothing for first widget" do
+    config = DashKit::Configuration.create!(
+      owner: @account,
+      dashboard_type: "home",
+      widget_order: %w[on_deck tasks goals],
+      hidden_widgets: []
+    )
+
+    config.move_widget_up(:on_deck)
+    assert_equal %w[on_deck tasks goals], config.reload.widget_order
+  end
+
+  test "move_widget_down swaps with next widget" do
+    config = DashKit::Configuration.create!(
+      owner: @account,
+      dashboard_type: "home",
+      widget_order: %w[on_deck tasks goals],
+      hidden_widgets: []
+    )
+
+    config.move_widget_down(:tasks)
+    assert_equal %w[on_deck goals tasks], config.reload.widget_order
+  end
+
+  test "move_widget_down does nothing for last widget" do
+    config = DashKit::Configuration.create!(
+      owner: @account,
+      dashboard_type: "home",
+      widget_order: %w[on_deck tasks goals],
+      hidden_widgets: []
+    )
+
+    config.move_widget_down(:goals)
+    assert_equal %w[on_deck tasks goals], config.reload.widget_order
+  end
 end
