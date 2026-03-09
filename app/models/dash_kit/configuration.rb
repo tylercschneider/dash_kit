@@ -20,6 +20,14 @@ module DashKit
       widget_order.reject { |w| hidden_widgets.include?(w) }
     end
 
+    def available_widgets
+      DashKit.registry.widgets_for(dashboard_type.to_sym)
+    end
+
+    def widget_visible?(widget_key)
+      !hidden_widgets.include?(widget_key.to_s)
+    end
+
     def toggle_widget(widget_key)
       key = widget_key.to_s
       self.hidden_widgets = if hidden_widgets.include?(key)

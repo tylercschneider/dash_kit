@@ -132,4 +132,22 @@ class DashKit::ConfigurationTest < ActiveSupport::TestCase
     assert_equal %w[on_deck tasks goals], config.widget_order
     assert_equal [], config.hidden_widgets
   end
+
+  test "available_widgets returns registered widgets for dashboard type" do
+    config = DashKit::Configuration.new(dashboard_type: "home")
+
+    widgets = config.available_widgets
+    assert_equal %i[on_deck tasks goals], widgets.keys
+    assert_equal "On Deck", widgets[:on_deck][:label]
+  end
+
+  test "widget_visible? returns true for non-hidden widgets" do
+    config = DashKit::Configuration.new(
+      dashboard_type: "home",
+      hidden_widgets: %w[tasks]
+    )
+
+    assert config.widget_visible?(:on_deck)
+    refute config.widget_visible?(:tasks)
+  end
 end
