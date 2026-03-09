@@ -31,4 +31,11 @@ class DashKit::DashboardHelperTest < ActionView::TestCase
   test "widget_label returns humanized key for unknown widget" do
     assert_equal "Unknown", dash_kit_widget_label(@config, :unknown)
   end
+
+  test "dash_kit_widget_frame renders turbo frame tag" do
+    html = dash_kit_widget_frame(:on_deck)
+    assert_match(/turbo-frame/, html)
+    assert_match(/widget_on_deck/, html)
+    assert_match(/loading="lazy"/, html)
+  end
 end
