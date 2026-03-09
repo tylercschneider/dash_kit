@@ -8,6 +8,14 @@ module DashKit
 
     validates :dashboard_type, presence: true
 
+    def self.for_owner(owner, dashboard_type)
+      find_or_initialize_by(owner: owner, dashboard_type: dashboard_type.to_s) do |config|
+        config.widget_order = DashKit.registry.default_widget_order(dashboard_type)
+        config.hidden_widgets = []
+        config.filter_state = {}
+      end
+    end
+
     def ordered_visible_widgets
       widget_order.reject { |w| hidden_widgets.include?(w) }
     end
@@ -29,6 +37,11 @@ module DashKit
       new_order = widget_order.dup
       new_order[index], new_order[index - 1] = new_order[index - 1], new_order[index]
       update!(widget_order: new_order)
+    end
+
+    def update_filter(key, value)
+      self.filter_state = filter_state.merge(key.to_s => value)
+      save!
     end
 
     def move_widget_down(widget_key)

@@ -98,4 +98,38 @@ class DashKit::ConfigurationTest < ActiveSupport::TestCase
     config.move_widget_down(:goals)
     assert_equal %w[on_deck tasks goals], config.reload.widget_order
   end
+
+  test "update_filter merges into filter_state" do
+    config = DashKit::Configuration.create!(
+      owner: @account,
+      dashboard_type: "home",
+      widget_order: %w[on_deck tasks goals],
+      hidden_widgets: [],
+      filter_state: { "time_period" => "last_30_days" }
+    )
+
+    config.update_filter(:time_period, "last_7_days")
+    assert_equal "last_7_days", config.reload.filter_state["time_period"]
+  end
+
+  test "for_owner finds existing configuration" do
+    existing = DashKit::Configuration.create!(
+      owner: @account,
+      dashboard_type: "home",
+      widget_order: %w[goals on_deck tasks],
+      hidden_widgets: %w[tasks]
+    )
+
+    found = DashKit::Configuration.for_owner(@account, :home)
+    assert_equal existing, found
+    assert_equal %w[goals on_deck tasks], found.widget_order
+  end
+
+  test "for_owner initializes new configuration with defaults" do
+    config = DashKit::Configuration.for_owner(@account, :home)
+
+    assert config.new_record?
+    assert_equal %w[on_deck tasks goals], config.widget_order
+    assert_equal [], config.hidden_widgets
+  end
 end
