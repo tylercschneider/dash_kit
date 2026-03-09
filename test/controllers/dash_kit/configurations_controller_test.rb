@@ -54,4 +54,20 @@ class DashKit::ConfigurationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_equal "last_7_days", @config.reload.filter_state["time_period"]
   end
+
+  test "move_widget up swaps with previous widget" do
+    post dash_kit.move_widget_configuration_path(@config),
+      params: { widget_key: "tasks", direction: "up" }
+
+    assert_response :redirect
+    assert_equal %w[tasks on_deck goals], @config.reload.widget_order
+  end
+
+  test "move_widget down swaps with next widget" do
+    post dash_kit.move_widget_configuration_path(@config),
+      params: { widget_key: "tasks", direction: "down" }
+
+    assert_response :redirect
+    assert_equal %w[on_deck goals tasks], @config.reload.widget_order
+  end
 end

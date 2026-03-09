@@ -9,6 +9,16 @@ module DashKit
       redirect_back fallback_location: main_app.root_path
     end
 
+    def move_widget
+      case params[:direction]
+      when "up"
+        @configuration.move_widget_up(params[:widget_key])
+      when "down"
+        @configuration.move_widget_down(params[:widget_key])
+      end
+      redirect_back fallback_location: main_app.root_path
+    end
+
     def save_filters
       @configuration.update_filter(params[:filter_key], params[:filter_value])
       head :ok
