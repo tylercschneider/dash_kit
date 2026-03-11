@@ -46,8 +46,9 @@ module DashKit
 
     def render_turbo_stream_update
       render turbo_stream: turbo_stream.replace(
-        "dashboard-widgets",
-        helpers.dash_kit_render_widgets(config: @configuration)
+        "dashboard-settings-modal",
+        partial: "dash_kit/configurations/settings_modal",
+        locals: { config: @configuration }
       )
     end
 

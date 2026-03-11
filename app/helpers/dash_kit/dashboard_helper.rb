@@ -29,6 +29,10 @@ module DashKit
       content_tag("turbo-frame", loading_content, id: id, src: src, loading: "lazy", target: "_top")
     end
 
+    def dash_kit_settings_modal(config:)
+      render partial: "dash_kit/configurations/settings_modal", locals: { config: config }
+    end
+
     def dash_kit_settings_button_attributes
       {
         type: "button",
