@@ -33,7 +33,7 @@ class DashKit::ConfigurationsControllerTest < ActionDispatch::IntegrationTest
 
   test "toggle_widget turbo_stream replaces widget list" do
     post dash_kit.toggle_widget_configuration_path(@config),
-      params: {widget_key: "tasks"},
+      params: { widget_key: "tasks" },
       as: :turbo_stream
 
     assert_response :success
