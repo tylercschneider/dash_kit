@@ -6,7 +6,10 @@ module DashKit
 
     def toggle_widget
       @configuration.toggle_widget(params[:widget_key])
-      redirect_back fallback_location: main_app.root_path
+      respond_to do |format|
+        format.turbo_stream { render_turbo_stream_update }
+        format.html { redirect_back fallback_location: main_app.root_path }
+      end
     end
 
     def move_widget
@@ -16,7 +19,10 @@ module DashKit
       when "down"
         @configuration.move_widget_down(params[:widget_key])
       end
-      redirect_back fallback_location: main_app.root_path
+      respond_to do |format|
+        format.turbo_stream { render_turbo_stream_update }
+        format.html { redirect_back fallback_location: main_app.root_path }
+      end
     end
 
     def save_filters
@@ -37,6 +43,13 @@ module DashKit
     end
 
     private
+
+    def render_turbo_stream_update
+      render turbo_stream: turbo_stream.replace(
+        "dashboard-widgets",
+        helpers.dash_kit_render_widgets(config: @configuration)
+      )
+    end
 
     def set_configuration
       @configuration = DashKit::Configuration.find(params[:id])

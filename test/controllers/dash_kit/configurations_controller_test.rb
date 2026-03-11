@@ -31,6 +31,15 @@ class DashKit::ConfigurationsControllerTest < ActionDispatch::IntegrationTest
     assert_includes @config.hidden_widgets, "tasks"
   end
 
+  test "toggle_widget turbo_stream replaces widget list" do
+    post dash_kit.toggle_widget_configuration_path(@config),
+      params: {widget_key: "tasks"},
+      as: :turbo_stream
+
+    assert_response :success
+    assert_includes response.body, "dashboard-widgets"
+  end
+
   test "reorder updates widget order with valid keys" do
     post dash_kit.reorder_configuration_path(@config),
       params: { widget_order: %w[goals tasks on_deck] }
