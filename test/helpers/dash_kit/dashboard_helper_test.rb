@@ -39,5 +39,12 @@ module DashKit
       assert_equal "button", attrs[:type]
       assert_equal "click->modal#open", attrs[:data][:action]
     end
+
+    test "dash_kit_settings_modal renders modal with widget toggles" do
+      html = dash_kit_settings_modal(config: @config)
+      assert_match "dashboard-settings-modal", html
+      assert_match "Stats", html
+      assert_match "Chart", html
+    end
   end
 end
