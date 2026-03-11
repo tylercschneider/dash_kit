@@ -35,7 +35,9 @@ module DashKit
       valid_keys = @configuration.available_widgets.keys.map(&:to_s)
 
       if new_order.is_a?(Array) && new_order.all? { |k| valid_keys.include?(k) }
-        @configuration.update!(widget_order: new_order)
+        attrs = { widget_order: new_order }
+        attrs[:hidden_widgets] = params[:hidden_widgets] if params[:hidden_widgets].is_a?(Array)
+        @configuration.update!(attrs)
         head :ok
       else
         head :unprocessable_entity
