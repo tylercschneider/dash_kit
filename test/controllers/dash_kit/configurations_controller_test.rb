@@ -90,4 +90,26 @@ class DashKit::ConfigurationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_equal %w[on_deck goals tasks], @config.reload.widget_order
   end
+
+  test "scoped find rejects configuration belonging to another owner" do
+    other_account = Account.create!(name: "Other")
+    other_config = DashKit::Configuration.create!(
+      owner: other_account,
+      dashboard_type: "home",
+      widget_order: %w[on_deck tasks goals],
+      hidden_widgets: []
+    )
+
+    DashKit.current_owner_method = :current_account
+    test_account = @account
+    DashKit::ApplicationController.define_method(:current_account) { test_account }
+
+    post dash_kit.toggle_widget_configuration_path(other_config),
+      params: { widget_key: "tasks" }
+
+    assert_response :not_found
+  ensure
+    DashKit.current_owner_method = nil
+    DashKit::ApplicationController.remove_method(:current_account) if DashKit::ApplicationController.method_defined?(:current_account, false)
+  end
 end

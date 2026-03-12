@@ -4,6 +4,9 @@ require "dash_kit/widget_registry"
 module DashKit
   class Error < StandardError; end
 
+  mattr_accessor :parent_controller, default: "DashKit::ApplicationController"
+  mattr_accessor :current_owner_method, default: nil
+
   def self.registry
     @registry ||= WidgetRegistry.new
   end

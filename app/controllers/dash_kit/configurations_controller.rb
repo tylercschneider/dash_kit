@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DashKit
-  class ConfigurationsController < ApplicationController
+  class ConfigurationsController < DashKit.parent_controller.constantize
     before_action :set_configuration
 
     def toggle_widget
@@ -55,7 +55,12 @@ module DashKit
     end
 
     def set_configuration
-      @configuration = DashKit::Configuration.find(params[:id])
+      scope = if DashKit.current_owner_method
+        DashKit::Configuration.where(owner: send(DashKit.current_owner_method))
+      else
+        DashKit::Configuration
+      end
+      @configuration = scope.find(params[:id])
     end
   end
 end
