@@ -26,7 +26,7 @@ module DashKit
       id = "widget_#{widget_key}"
       loading_content = block ? capture(&block) : dash_kit_loading_skeleton
 
-      content_tag("turbo-frame", loading_content, id: id, src: src, loading: "lazy", target: "_top")
+      content_tag("turbo-frame", loading_content, id: id, src: src, loading: "lazy", target: "_top", style: "display: block")
     end
 
     def dash_kit_settings_modal(config:)
