@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DashKit
-  class ConfigurationsController < ApplicationController
+  class ConfigurationsController < DashKit.parent_controller.constantize
     before_action :set_configuration
 
     def toggle_widget

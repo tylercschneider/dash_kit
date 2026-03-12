@@ -10,4 +10,8 @@ class DashKit::ConfigTest < ActiveSupport::TestCase
   test "current_owner_method defaults to nil" do
     assert_nil DashKit.current_owner_method
   end
+
+  test "ConfigurationsController inherits from parent_controller" do
+    assert_equal DashKit::ApplicationController, DashKit::ConfigurationsController.superclass
+  end
 end
