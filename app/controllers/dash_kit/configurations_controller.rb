@@ -55,7 +55,12 @@ module DashKit
     end
 
     def set_configuration
-      @configuration = DashKit::Configuration.find(params[:id])
+      scope = if DashKit.current_owner_method
+        DashKit::Configuration.where(owner: send(DashKit.current_owner_method))
+      else
+        DashKit::Configuration
+      end
+      @configuration = scope.find(params[:id])
     end
   end
 end
