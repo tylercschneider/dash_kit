@@ -1,0 +1,31 @@
+{
+  "name": "dash_kit",
+  "version": "1.0.0",
+  "description": "## What DashKit Is",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tylercschneider/dash_kit.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tylercschneider/dash_kit/issues"
+  },
+  "homepage": "https://github.com/tylercschneider/dash_kit#readme",
+  "devDependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "jsdom": "^27.0.1",
+    "sortablejs": "^1.15.7",
+    "vitest": "^3.2.4"
+  }
+}

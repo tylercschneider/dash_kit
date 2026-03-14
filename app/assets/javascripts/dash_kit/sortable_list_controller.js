@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import Sortable from "sortablejs"
 
 // Handles dashboard widget visibility toggles and reordering.
 // Changes are batched and saved when the modal closes (done action).
@@ -10,6 +11,18 @@ export default class extends Controller {
 
   connect() {
     this.dirty = false
+
+    if (this.hasListTarget) {
+      this.sortable = Sortable.create(this.listTarget, {
+        handle: "[data-sortable-handle]",
+        animation: 150,
+        onEnd: () => { this.dirty = true }
+      })
+    }
+  }
+
+  disconnect() {
+    this.sortable?.destroy()
   }
 
   toggle(event) {
