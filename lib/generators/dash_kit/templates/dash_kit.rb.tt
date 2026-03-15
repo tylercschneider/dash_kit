@@ -1,3 +1,11 @@
+# Set the parent controller for DashKit's controllers to inherit from.
+# This gives DashKit access to authentication and helper methods.
+DashKit.parent_controller = "ApplicationController"
+
+# Set the method DashKit uses to find the current owner (e.g. account or user).
+# This scopes dashboard configurations to the correct owner.
+DashKit.current_owner_method = :current_account
+
 DashKit.configure do |config|
   # Register your dashboards and widgets here.
   #

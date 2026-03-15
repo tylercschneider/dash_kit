@@ -82,32 +82,87 @@ DashKit does **not** define:
 - Which fields are required beyond a widget’s renderer.
 - How values are derived.
 
-## Basic Usage Example
+## Installation
 
-Mounting DashKit:
+Add the gem to your Gemfile:
 
 ```ruby
-# config/routes.rb
-mount DashKit::Engine, at: "/dashboards"
+gem "dash_kit", github: "tylercschneider/dash_kit"
 ```
 
-Registering a data provider:
+Run the install generator:
+
+```bash
+bundle install
+rails generate dash_kit:install
+rails db:migrate
+```
+
+The generator creates the migration, initializer, and engine route. You still need to complete these manual steps:
+
+### 1. Add the association to your owner model
 
 ```ruby
+# app/models/account.rb (or whichever model owns dashboards)
+has_many :dash_kit_configurations, class_name: "DashKit::Configuration",
+         as: :owner, dependent: :destroy
+```
+
+### 2. Pin sortablejs for drag-and-drop reordering
+
+```ruby
+# config/importmap.rb
+pin "sortablejs"
+```
+
+### 3. Register Stimulus controllers
+
+```js
+// app/javascript/controllers/index.js
+import { registerControllers as registerDashKitControllers } from "dash_kit/index"
+registerDashKitControllers(application)
+```
+
+### 4. Configure the initializer
+
+```ruby
+# config/initializers/dash_kit.rb
+DashKit.parent_controller = "ApplicationController"
+DashKit.current_owner_method = :current_account
+
 DashKit.configure do |config|
-  config.data_provider = MyProvider.new
-end
-```
-
-Rendering a simple dashboard:
-
-```ruby
-# app/controllers/dashboards_controller.rb
-class DashboardsController < ApplicationController
-  def show
-    @dashboard = DashKit::Dashboard.load("sales")
+  config.register(:home) do |d|
+    d.widget :on_deck, label: "On Deck", partial: "widgets/home/on_deck"
+    d.widget :tasks,   label: "Tasks",   partial: "widgets/home/tasks"
   end
 end
+```
+
+- `parent_controller` — the controller DashKit inherits from (gives it access to authentication and helpers)
+- `current_owner_method` — the method DashKit calls to scope configurations to the current owner
+
+### 5. Create a dashboard controller and view
+
+```ruby
+# app/controllers/dashboard_controller.rb
+class DashboardController < ApplicationController
+  def show
+    @dashboard_config = DashKit::Configuration.for_owner(current_account, :home)
+    @dashboard_config.save! if @dashboard_config.new_record?
+  end
+end
+```
+
+```erb
+<%# app/views/dashboard/show.html.erb %>
+<%= dash_kit_settings_button_attributes %>
+<%= dash_kit_settings_modal(config: @dashboard_config) %>
+
+<div class="mt-4 space-y-6">
+  <% @dashboard_config.ordered_visible_widgets.each do |widget_key| %>
+    <%= render "widgets/widget_frame", widget_key: widget_key %>
+  <% end %>
+</div>
 ```
 
 ## Design Philosophy
