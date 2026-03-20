@@ -9,7 +9,7 @@ PATH
   remote: .
   specs:
     dash_kit (0.1.0)
-      keystone_ui
+      keystone_ui (>= 0.4.1)
       rails (>= 7.1)
       turbo-rails
 
